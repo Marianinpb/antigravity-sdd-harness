@@ -17,7 +17,7 @@ github:
 
   # Default visibility for new repositories.
   # Options: "private", "public", "internal" (GitHub Enterprise only)
-  default_visibility: "private"
+  default_visibility: "public"
 
   # If true, the agent will automatically create a GitHub repository
   # when initializing a new project with the SDD Harness.
