@@ -1,0 +1,92 @@
+# harness-config.yaml
+# =============================================================================
+# Central configuration file for the SDD Harness.
+# The AI agent reads this file at startup to understand the project scope,
+# technology stack, and rules to enforce.
+#
+# INSTRUCTIONS: Fill in the fields below for each new project.
+# Keys marked [REQUIRED] must be completed before starting any SDD phase.
+# =============================================================================
+
+# ---------------------------------------------------------------------------
+# Project Definition [REQUIRED]
+# ---------------------------------------------------------------------------
+project:
+  name: ""                    # Project name. Example: "SensorFirmware"
+  type: ""                    # Project type. Options:
+                              #   "embedded"      - Firmware, microcontrollers
+                              #   "fpga"          - VHDL/Verilog FPGA designs
+                              #   "web-api"       - Backend APIs, web services
+                              #   "web-app"       - Frontend web applications
+                              #   "mobile-app"    - Mobile applications
+                              #   "data-science"  - Data analysis, ML/AI
+                              #   "cli-tool"      - Command-line tools
+                              #   "library"       - Reusable libraries/packages
+                              #   "desktop-app"   - Desktop applications
+  description: ""             # Brief, high-level project description.
+
+# ---------------------------------------------------------------------------
+# Environment & Technology [REQUIRED]
+# ---------------------------------------------------------------------------
+environment:
+  tech_stack: []              # Languages and frameworks used.
+                              # Examples:
+                              #   ["python", "fastapi", "postgresql"]
+                              #   ["c", "esp-idf", "freertos"]
+                              #   ["vhdl", "quartus"]
+                              #   ["python", "pytorch", "pandas"]
+                              #   ["latex"]
+  runtime_version: ""         # Primary runtime version. Example: "3.11", "esp-idf-v5.1"
+  package_manager: ""         # Package manager. Options:
+                              #   "pip", "poetry", "conda"      (Python)
+                              #   "idf.py"                       (ESP-IDF)
+                              #   "quartus", "vivado"            (FPGA)
+                              #   "npm", "yarn", "pnpm"          (JavaScript)
+                              #   ""                             (None/manual)
+
+# ---------------------------------------------------------------------------
+# Harness Behavior
+# ---------------------------------------------------------------------------
+harness:
+  specification_language: "RFC-2119"   # Specifications use MUST, MUST NOT, SHOULD, etc.
+  quality_gates_enabled: true          # If true, agent MUST validate against quality-gates.json.
+  security_profile: "embedded"         # Security profile to apply. Options:
+                                       #   "embedded"      - Default. Memory safety, input validation.
+                                       #   "data-science"  - Data privacy, API key management.
+                                       #   "web"           - OAuth 2.0, SQL injection prevention.
+                                       #   "custom"        - User-defined in security-rules.md.
+
+# ---------------------------------------------------------------------------
+# Rules to Enforce
+# ---------------------------------------------------------------------------
+# The `enforce` flag determines behavior:
+#   true  = Any violation STOPS the process immediately.
+#   false = Violations are reported as warnings but do not block progress.
+#
+# The absence of a rule file here means it DOES NOT APPLY (not that it's optional).
+rules:
+  - path: "rules/security-rules.md"
+    enforce: true
+  - path: "rules/coding-standards.md"
+    enforce: true
+  - path: "rules/quality-gates.json"
+    enforce: true
+
+# ---------------------------------------------------------------------------
+# Workflow Configuration
+# ---------------------------------------------------------------------------
+workflows:
+  registry_path: "workflows/registry.yaml"
+
+# ---------------------------------------------------------------------------
+# Custom Quality Gates (Optional)
+# ---------------------------------------------------------------------------
+# Add project-specific quality gates here. These are APPENDED to the defaults
+# in quality-gates.json. Use the same schema.
+custom_quality_gates: []
+  # Example:
+  # - id: "QG-CUSTOM-01"
+  #   description: "Custom project-specific check"
+  #   language: "python"
+  #   command: "python scripts/validate.py"
+  #   mandatory: true
