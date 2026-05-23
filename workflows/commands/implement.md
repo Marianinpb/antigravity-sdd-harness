@@ -32,6 +32,34 @@ Write tests before implementation. Run them. Verify they FAIL.
 
 > For LaTeX, MATLAB, Mathematica: define verification criteria instead.
 
+> **Para el tipo `exposition`:** Las "pruebas" son criterios de verificación:
+> - Verificar que el archivo de resumen existe y tiene contenido estructurado.
+> - Verificar que `presentacion.tex` no contiene la cadena `{{` (placeholders sin reemplazar).
+> - Verificar que el PDF se generó correctamente (si el compilador está disponible).
+> - Verificar que `guion_exposicion.md` tiene una sección por cada frame de la presentación.
+
+> **Copia condicional de assets:** Para tipos de proyecto con `additional_assets`
+> en el registry, el agente copia los assets al directorio destino SOLO cuando
+> ejecuta la tarea indicada en `copy_condition`. No copiar al inicio del proyecto.
+>
+> Para `exposition`: copiar `project_types/exposition/templates/` → `presentacion/`
+> únicamente al ejecutar TASK-04 en la Fase C.
+
+> **Compilación LaTeX (verificación inteligente):**
+> Antes de intentar compilar un archivo `.tex`, el agente DEBE:
+> 1. Verificar si `pdflatex` está disponible: `pdflatex --version`.
+> 2. Si no, verificar `latexmk`: `latexmk --version`.
+> 3. Si ninguno está disponible:
+>    a. Preguntar: "¿Tienes un compilador de LaTeX instalado?"
+>    b. Si no: "¿Deseas que intente instalarlo?"
+>    c. Si rechaza: generar solo el `.tex` e informar cómo compilar manualmente.
+>
+> **Lectura de fuentes para el tipo `exposition`:**
+> - **Paper (`paper_path`):** El agente usa sus capacidades LLM para leer el PDF.
+>   Si no puede extraer información suficiente, pregunta al usuario los puntos clave.
+> - **Repositorio (`repo_url`):** El agente lee primero el README y docs vía HTTP.
+>   Solo propone clonar si los docs mencionan assets necesarios que no están en línea.
+
 ### Step 3: Implement (GREEN 🟢)
 Write **minimum code** to pass tests. Follow coding-standards and security-rules. Stay within `_Boundary_`.
 

@@ -23,6 +23,7 @@ project:
                               #   "cli-tool"      - Command-line tools
                               #   "library"       - Reusable libraries/packages
                               #   "desktop-app"   - Desktop applications
+                              #   "exposition"    - Presentaciones académicas (LaTeX beamer)
   description: ""             # Brief, high-level project description.
 
 # ---------------------------------------------------------------------------
@@ -90,3 +91,39 @@ custom_quality_gates: []
   #   language: "python"
   #   command: "python scripts/validate.py"
   #   mandatory: true
+
+# ---------------------------------------------------------------------------
+# Configuración de Exposición (solo aplica si project.type = "exposition")
+# ---------------------------------------------------------------------------
+# El agente lee esta sección cuando detecta project.type: exposition.
+#
+# REGLA CRÍTICA: Los campos title, subtitle, author, institution y date
+# NO deben inferirse de la fuente de contenido. El agente DEBE preguntar
+# estos datos EXPLÍCITAMENTE al usuario durante /specify.
+#
+# El autor del paper ≠ el expositor.
+# El título del paper ≠ el título de la exposición.
+# La institución de los autores ≠ la institución del expositor.
+# ---------------------------------------------------------------------------
+exposition:
+  # Fuente de contenido (usar SOLO UNA de las siguientes tres opciones):
+  paper_path: ""              # Opción 1: Ruta relativa al PDF del paper/artículo.
+  topic: ""                   # Opción 2: Tema libre de la exposición.
+  book_reference: ""          # Opción 2: Referencia del libro base (se usa junto con topic).
+  repo_url: ""                # Opción 3: URL del repositorio a analizar.
+
+  # Datos del expositor — SIEMPRE preguntar explícitamente al usuario.
+  # Dejar vacíos aquí; el agente los llenará tras confirmar con el usuario.
+  title: ""                   # Título de la presentación (provisto por el usuario).
+  subtitle: ""                # Subtítulo, opcional (provisto por el usuario).
+  author: ""                  # Nombre completo del expositor (provisto por el usuario).
+  institution: ""             # Institución académica del expositor (provisto por el usuario).
+  date: ""                    # Fecha de presentación (provisto por el usuario).
+
+  # Configuración adicional:
+  estimated_duration: ""      # Duración estimada. Ejemplo: "20 min".
+  audience: ""                # Audiencia objetivo. Ejemplo: "Maestría en Ciencias".
+  language: "es"              # Idioma de los entregables.
+                              # Por defecto: "es" (español).
+                              # IMPORTANTE: Solo cambiar con confirmación EXPLÍCITA del usuario.
+                              # El idioma de la fuente NO determina el idioma de la presentación.

@@ -80,6 +80,19 @@ antigravity-sdd-harness/
 └── memory/                      # Project context and decision history
     ├── project-context.md       # High-level project context (fill per project)
     └── decision-log.md          # Immutable decision log
+
+└── project_types/               # Plantillas para tipos de proyecto especializados
+    └── exposition/              # Presentaciones académicas (LaTeX beamer)
+        ├── README.md            # Documentación del módulo
+        ├── spec_template.md     # Plantilla de especificación
+        ├── plan_template.md     # Plantilla de plan de implementación
+        ├── tasks_template.md    # Plantilla de desglose de tareas
+        └── templates/           # Assets LaTeX (se copian condicionalmente)
+            ├── presentacion.tex # Plantilla LaTeX parametrizada con placeholders
+            ├── beamercolorthemeaggie.sty
+            ├── presentacion.bib
+            ├── IICO-LOGO-AZUL.png
+            └── UASLP-LOGO-AZUL.png
 ```
 
 ---
@@ -94,6 +107,23 @@ The harness supports multiple security profiles configured via `harness-config.y
 | `data-science` | ML/AI, data analysis, notebooks | Data privacy, API key management, reproducibility |
 | `web` | APIs, web applications | OAuth 2.0, SQL injection prevention, error handling |
 | `custom` | Anything else | User-defined rules |
+
+---
+
+## Tipos de Proyecto Especializados
+
+El harness soporta tipos de proyecto con plantillas y flujos adaptados que se
+integran en el ciclo SDD estándar sin introducir comandos nuevos.
+
+| Tipo | Descripción | Entregables | Documentación |
+|------|-------------|-------------|---------------|
+| `exposition` | Presentaciones académicas | Resumen, presentación LaTeX, guion | `project_types/exposition/README.md` |
+
+Para activar un tipo especializado, establece `project.type` en `harness-config.yaml`
+al valor correspondiente. Las plantillas genéricas son sobreescritas automáticamente
+por las del tipo de proyecto. Los assets adicionales (p.ej. archivos LaTeX) solo
+se copian cuando la tarea correspondiente lo indica, no al inicio del proyecto.
+
 
 ---
 
