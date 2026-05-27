@@ -24,6 +24,7 @@ project:
                               #   "library"       - Reusable libraries/packages
                               #   "desktop-app"   - Desktop applications
                               #   "exposition"    - Presentaciones académicas (LaTeX beamer)
+                              #   "reporte"       - Reportes técnicos o académicos (LaTeX IEEE)
   description: ""             # Brief, high-level project description.
 
 # ---------------------------------------------------------------------------
@@ -127,3 +128,35 @@ exposition:
                               # Por defecto: "es" (español).
                               # IMPORTANTE: Solo cambiar con confirmación EXPLÍCITA del usuario.
                               # El idioma de la fuente NO determina el idioma de la presentación.
+
+# ---------------------------------------------------------------------------
+# Configuración de Reporte (solo aplica si project.type = "reporte")
+# ---------------------------------------------------------------------------
+# El agente lee esta sección cuando detecta project.type: reporte.
+#
+# REGLA CRÍTICA: Los campos title, author, institution, y correspondence
+# NO deben inferirse de la fuente de contenido. El agente DEBE preguntar
+# estos datos EXPLÍCITAMENTE al usuario durante /specify.
+# ---------------------------------------------------------------------------
+reporte:
+  # Fuentes de contenido (se pueden combinar):
+  sources: []                 # Ejemplo:
+                              # - type: "repo"
+                              #   url: "https://github.com/usuario/repo"
+                              # - type: "book"
+                              #   reference: "Farhang-Boroujeny, B. (2013)"
+                              # - type: "paper"
+                              #   path: "docs/paper.pdf"
+
+  # Datos del autor — SIEMPRE preguntar explícitamente al usuario.
+  title: ""                   # Título del reporte
+  title_short: ""             # Título corto para el encabezado
+  author: ""                  # Nombre completo del autor
+  author_short: ""            # Nombre corto del autor para el encabezado
+  institution: ""             # Institución académica
+  correspondence: ""          # Datos de contacto (ej. email)
+  date: ""                    # Fecha del reporte
+
+  # Configuración adicional:
+  language: "es"              # Idioma por defecto: "es" (español)
+  template_name: "ieee"       # Plantilla a utilizar. Opciones: "ieee", "ciep"
