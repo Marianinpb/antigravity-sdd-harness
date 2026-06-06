@@ -34,40 +34,20 @@
 
 ---
 
-## Soporte para Tipos de Proyecto Especializados
+## Standalone Commands
 
-El harness soporta tipos de proyecto con plantillas y entregables adaptados que
-se integran en el flujo SDD estándar **sin alterar las fases ni los comandos**.
+Además del ciclo SDD estándar, el harness expone comandos autónomos que generan
+entregables de documentación desde cualquier proyecto:
 
-Cuando `project.type` en `harness-config.yaml` coincide con un tipo definido en
-`workflows/registry.yaml` → `project_types`, el agente DEBE:
+| Comando | Propósito | Workflow |
+|---------|-----------|----------|
+| `/exposition` | Generar presentación académica (resumen, slides, guion) | `workflows/commands/exposition.md` |
+| `/report` | Generar reporte técnico/académico con diagramas Mermaid | `workflows/commands/report.md` |
 
-1. **Usar las plantillas del tipo de proyecto** en lugar de las genéricas de
-   `templates/`. Las plantillas especializadas tienen prioridad absoluta.
-2. **Generar los entregables específicos** del tipo (definidos en `outputs`).
-3. **Copiar assets adicionales** solo cuando la tarea correspondiente lo indique
-   (`copy_condition`). No copiar al inicio del proyecto.
-4. **Respetar las reglas del tipo** definidas en `project_types.{tipo}.rules`.
-
-### Tipos de proyecto con soporte especializado
-
-| Tipo | Descripción | Plantillas |
-|------|-------------|------------|
-| `exposition` | Presentaciones académicas | `project_types/exposition/` |
-
-> **REGLAS CRÍTICAS para `exposition`:**
->
-> 1. Los datos del expositor (título, autor, institución, fecha) **SIEMPRE** se
->    preguntan explícitamente al usuario durante `/specify`. **NUNCA** se infieren
->    del contenido de la fuente (paper, libro, repositorio).
->    El autor de la fuente ≠ el expositor.
->
-> 2. El idioma de los entregables es **español por defecto**. Solo se cambia con
->    confirmación humana explícita. El idioma de la fuente NO determina el idioma
->    de la presentación.
->
-> 3. Los assets LaTeX solo se copian al directorio `presentacion/` del proyecto
->    cuando el tipo es `exposition` y se ejecuta la tarea de generación de presentación.
+Estos comandos son **autocontenidos**: no siguen el ciclo `/specify → /plan → /implement`,
+sino que tienen su propio flujo interno que genera spec/plan/tasks como artefactos
+de trazabilidad. Pueden invocarse desde cualquier proyecto sin cambiar el
+`project.type`.
 
 ---
 

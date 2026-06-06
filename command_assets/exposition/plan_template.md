@@ -2,6 +2,7 @@
 
 > **Estado:** Borrador | En Revisión | Aprobado
 > **Especificación:** [Enlace a la spec aprobada: specs/SPEC-XX-exposicion.md]
+> **Comando:** `/exposition`
 > **Autor:** [Nombre del expositor — dato proporcionado explícitamente por el usuario]
 > **Fecha:** [YYYY-MM-DD]
 > **Aprobado por:** [Nombre] el [YYYY-MM-DD]
@@ -11,8 +12,8 @@
 ## 1. Resumen
 
 Este plan describe cómo se generarán los entregables de la exposición académica
-a partir de la fuente de contenido especificada. El proceso sigue el flujo SDD
-estándar pero con plantillas y tareas predefinidas para el tipo `exposition`.
+a partir de la fuente de contenido especificada. El proceso usa el comando
+`/exposition` con plantillas y tareas predefinidas.
 
 **Enfoque técnico:**
 El agente analiza la fuente de contenido con sus capacidades LLM, extrae los
@@ -129,7 +130,7 @@ _Cada tarea incluye `_Boundary_` y `_Depends_`. Ver `tasks/TASKS-XX-exposicion.m
 
 #### Tarea 4: Copiar plantilla LaTeX al directorio del proyecto
 - **ID:** TASK-04
-- **_Boundary_:** Solo copia archivos de `project_types/exposition/templates/`
+- **_Boundary_:** Solo copia archivos de `command_assets/exposition/templates/`
   al directorio `presentacion/` del proyecto. No modifica ningún archivo.
 - **_Depends_:** TASK-01
 - **Descripción:** Copiar condicionalmente los assets LaTeX:
@@ -138,13 +139,14 @@ _Cada tarea incluye `_Boundary_` y `_Depends_`. Ver `tasks/TASKS-XX-exposicion.m
   - `presentacion.bib` → `presentacion/presentacion.bib`
   - `IICO-LOGO-AZUL.png` → `presentacion/IICO-LOGO-AZUL.png`
   - `UASLP-LOGO-AZUL.png` → `presentacion/UASLP-LOGO-AZUL.png`
-  IMPORTANTE: Solo copiar si el proyecto es de tipo `exposition`.
+  IMPORTANTE: Solo copiar al ejecutar el comando `/exposition`.
 - **Tests/Verificación:** Los 5 archivos existen en `presentacion/`.
 - **Complejidad:** Baja
 
 #### Tarea 5: Reemplazar placeholders y generar contenido de diapositivas
 - **ID:** TASK-05
 - **_Boundary_:** Solo modifica `presentacion/presentacion.tex`.
+  Crea `presentacion/diagramas/` si se requieren diagramas.
 - **_Depends_:** TASK-03, TASK-04
 - **Descripción:**
   1. Reemplazar los placeholders de metadatos con los datos del usuario:
@@ -156,9 +158,17 @@ _Cada tarea incluye `_Boundary_` y `_Depends_`. Ver `tasks/TASKS-XX-exposicion.m
   2. Generar el contenido de las secciones y frames (`{{CONTENIDO_SECCIONES}}`)
      a partir del resumen generado en TASK-03. Cada concepto clave se convierte
      en una sección con sus frames correspondientes.
-  3. Verificar que NO quede ningún placeholder `{{...}}` sin reemplazar.
+  3. **Diagramas:** Si la presentación requiere diagramas (arquitectura,
+     diagramas de flujo, etc.), crearlos con Mermaid:
+     - Agregar `\usepackage{svg}` al preámbulo de `presentacion.tex`
+     - Crear archivos `.mmd` en `presentacion/diagramas/`
+     - Renderizar a SVG: `mmdc -i presentacion/diagramas/<archivo>.mmd -o presentacion/diagramas/<archivo>.svg -b transparent`
+     - Incluir en LaTeX: `\includesvg[width=0.8\linewidth]{presentacion/diagramas/<archivo>}`
+     - Seguir `rules/diagram-standards.md` estrictamente
+  4. Verificar que NO quede ningún placeholder `{{...}}` sin reemplazar.
 - **Tests/Verificación:** El archivo `.tex` no contiene la cadena `{{`. Todos los
-  metadatos visibles corresponden a datos del usuario.
+  metadatos visibles corresponden a datos del usuario. Los diagramas SVG tienen
+  fondo transparente. No hay `\begin{tikzpicture}`.
 - **Complejidad:** Alta
 
 #### Tarea 6: Compilar la presentación a PDF (condicional)
@@ -246,7 +256,7 @@ _Cada tarea incluye `_Boundary_` y `_Depends_`. Ver `tasks/TASKS-XX-exposicion.m
 
 ## 9. Plan de Rollback
 
-- Los assets LaTeX se copian desde `project_types/exposition/templates/`, por lo que
+- Los assets LaTeX se copian desde `command_assets/exposition/templates/`, por lo que
   pueden eliminarse y recopiarse en cualquier momento.
 - Los archivos generados (resumen, presentación, guion) pueden regenerarse ejecutando
   `/implement` nuevamente desde la tarea correspondiente.

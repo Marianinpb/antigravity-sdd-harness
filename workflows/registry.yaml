@@ -64,6 +64,50 @@ commands:
     requires_approval: false
     max_retries: 2
 
+  exposition:
+    description: "Generate academic presentation (summary, LaTeX slides, script)"
+    workflow: "workflows/commands/exposition.md"
+    rules_enforced:
+      - "rules/coding-standards.md"
+      - "rules/diagram-standards.md"
+    templates_used:
+      - "command_assets/exposition/spec_template.md"
+      - "command_assets/exposition/plan_template.md"
+      - "command_assets/exposition/tasks_template.md"
+    additional_assets:
+      - source: "command_assets/exposition/templates/"
+        destination: "presentacion/"
+        copy_condition: "Copiar SOLO al ejecutar TASK-04 en el comando /exposition"
+    outputs:
+      - "specs/SPEC-XX-exposicion.md"
+      - "plans/PLAN-XX-exposicion.md"
+      - "tasks/TASKS-XX-exposicion.md"
+      - "resumen_{fuente}.md"
+      - "presentacion/presentacion.tex"
+      - "presentacion/presentacion.pdf  (si compilador disponible)"
+      - "guion_exposicion.md"
+      - "presentacion/diagramas/*.mmd + *.svg  (si se requieren diagramas)"
+    requires_approval: true
+
+  report:
+    description: "Generate academic/technical report in LaTeX (IEEE/CIEP) with Mermaid diagrams"
+    workflow: "workflows/commands/report.md"
+    rules_enforced:
+      - "rules/coding-standards.md"
+      - "rules/diagram-standards.md"
+    templates_used:
+      - "command_assets/reporte/spec_template.md"
+      - "command_assets/reporte/plan_template.md"
+      - "command_assets/reporte/tasks_template.md"
+    outputs:
+      - "specs/SPEC-XX-reporte.md"
+      - "plans/PLAN-XX-reporte.md"
+      - "tasks/TASKS-XX-reporte.md"
+      - "reporte/reporte.tex"
+      - "reporte/reporte.pdf  (si compilador disponible)"
+      - "reporte/diagramas/*.mmd + *.svg  (si se requieren diagramas)"
+    requires_approval: true
+
 # ---------------------------------------------------------------------------
 # Lifecycle Flow
 # ---------------------------------------------------------------------------
@@ -83,44 +127,4 @@ memory:
   context: "memory/project-context.md"
   decisions: "memory/decision-log.md"
   decisions_append_only: true
-
-# ---------------------------------------------------------------------------
-# Tipos de Proyecto Especializados
-# ---------------------------------------------------------------------------
-# Cuando project.type coincide con un tipo listado aquí, el harness usa las
-# plantillas especializadas en lugar de las genéricas de templates/.
-#
-# Los comandos /specify, /plan y /implement detectan automáticamente el tipo
-# y cargan las plantillas correspondientes. No se requieren comandos nuevos.
-# ---------------------------------------------------------------------------
-project_types:
-  exposition:
-    description: "Generación automática de presentaciones académicas"
-    templates_override:
-      spec: "project_types/exposition/spec_template.md"
-      plan: "project_types/exposition/plan_template.md"
-      tasks: "project_types/exposition/tasks_template.md"
-    additional_assets:
-      - source: "project_types/exposition/templates/"
-        destination: "presentacion/"
-        copy_condition: "Copiar SOLO al ejecutar TASK-04 en /implement. No copiar en otros tipos de proyecto."
-    outputs:
-      - "specs/SPEC-XX-exposicion.md"
-      - "plans/PLAN-XX-exposicion.md"
-      - "tasks/TASKS-XX-exposicion.md"
-      - "resumen_paper.md | resumen_tema.md | resumen_proyecto.md"
-      - "presentacion/presentacion.tex"
-      - "presentacion/presentacion.pdf  (si el compilador LaTeX está disponible)"
-      - "guion_exposicion.md"
-    rules:
-      - "CRÍTICA: Los datos del expositor (title, author, institution, date) SIEMPRE
-         se preguntan explícitamente al usuario en /specify. NUNCA se infieren
-         de la fuente (paper, libro, repositorio)."
-      - "IDIOMA: Los entregables se generan en español por defecto (language: es).
-         Solo cambiar con confirmación humana explícita. El idioma de la fuente
-         NO determina el idioma de la presentación."
-      - "COMPILACIÓN: Antes de compilar LaTeX, verificar disponibilidad de pdflatex
-         o latexmk. Si no están disponibles, preguntar al usuario."
-      - "ASSETS: Los archivos de project_types/exposition/templates/ SOLO se copian
-         para proyectos de tipo exposition, nunca para otros tipos."
 

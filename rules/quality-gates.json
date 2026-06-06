@@ -105,6 +105,15 @@
         "mandatory": false,
         "error_message": "Mathematica script has syntax errors.",
         "notes": "Requires WolframScript to be installed. This gate is optional if WolframScript is not available."
+      },
+      {
+        "id": "QG-13",
+        "description": "Mermaid diagrams must render without errors to transparent SVG.",
+        "language": "latex",
+        "command": "mmdc -i {diagram_file} -o {output}.svg -b transparent",
+        "mandatory": true,
+        "error_message": "Mermaid diagram failed to render. Fix the Mermaid syntax and re-render.",
+        "notes": "Requires @mermaid-js/mermaid-cli to be installed (npm install -g @mermaid-js/mermaid-cli). If mmdc is not available, inform the user and offer installation. The -b transparent flag is MANDATORY to prevent white-background issues in document viewers."
       }
     ],
     "pre_merge": [

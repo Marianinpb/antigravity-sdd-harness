@@ -44,6 +44,8 @@ Use these commands to navigate the lifecycle:
 - `/plan` — Start Phase 2: Design and Planning
 - `/implement` — Start Phase 3: Implementation (TDD)
 - `/review` — Trigger quality gates and code review
+- `/exposition` — Generate academic presentation (summary, LaTeX slides, script)
+- `/report` — Generate academic/technical report in LaTeX with Mermaid diagrams
 
 ---
 
@@ -66,7 +68,8 @@ antigravity-sdd-harness/
 ├── rules/                       # Domain rules and quality criteria
 │   ├── security-rules.md        # Security rules (multi-profile)
 │   ├── coding-standards.md      # Coding conventions and naming
-│   └── quality-gates.json       # Automated quality checks (multi-language)
+│   ├── quality-gates.json       # Automated quality checks (multi-language)
+│   └── diagram-standards.md     # Mermaid diagram rules (/report, /exposition)
 │
 ├── workflows/                   # Agent workflow definitions
 │   ├── sdd-lifecycle.md         # Main lifecycle (the master document)
@@ -74,33 +77,35 @@ antigravity-sdd-harness/
 │   │   ├── specify.md
 │   │   ├── plan.md
 │   │   ├── implement.md
-│   │   └── review.md
+│   │   ├── review.md
+│   │   ├── exposition.md        # /exposition — academic presentations
+│   │   └── report.md            # /report — academic/technical reports
 │   └── registry.yaml            # Command-to-workflow mapping
 │
-└── memory/                      # Project context and decision history
-    ├── project-context.md       # High-level project context (fill per project)
-    └── decision-log.md          # Immutable decision log
-
-└── project_types/               # Plantillas para tipos de proyecto especializados
-    ├── exposition/              # Presentaciones académicas (LaTeX beamer)
-    │   ├── README.md            # Documentación del módulo
-    │   ├── spec_template.md     # Plantilla de especificación
-    │   ├── plan_template.md     # Plantilla de plan de implementación
-    │   ├── tasks_template.md    # Plantilla de desglose de tareas
-    │   └── templates/           # Assets LaTeX (se copian condicionalmente)
-    │       ├── presentacion.tex # Plantilla LaTeX parametrizada con placeholders
+├── memory/                      # Project context and decision history
+│   ├── project-context.md       # High-level project context (fill per project)
+│   └── decision-log.md          # Immutable decision log
+│
+└── command_assets/              # Assets for non-lifecycle commands
+    ├── exposition/              # /exposition command assets
+    │   ├── README.md            # Module documentation
+    │   ├── spec_template.md     # Specification template
+    │   ├── plan_template.md     # Plan template
+    │   ├── tasks_template.md    # Task breakdown template
+    │   └── templates/           # LaTeX assets (copied conditionally)
+    │       ├── presentacion.tex # LaTeX beamer template with placeholders
     │       ├── beamercolorthemeaggie.sty
     │       ├── presentacion.bib
     │       ├── IICO-LOGO-AZUL.png
     │       └── UASLP-LOGO-AZUL.png
-    └── reporte/                 # Reportes académicos/técnicos (LaTeX IEEE/CIEP)
-        ├── README.md            # Documentación del módulo
-        ├── spec_template.md     # Plantilla de especificación
-        ├── plan_template.md     # Plantilla de plan de implementación
-        ├── tasks_template.md    # Plantilla de desglose de tareas
-        └── templates/           # Plantillas LaTeX IEEE y CIEP
-            ├── ieee/            # Plantilla estilo IEEE
-            └── ciep/            # Plantilla estilo CIEP
+    └── reporte/                 # /report command assets
+        ├── README.md            # Module documentation
+        ├── spec_template.md     # Specification template
+        ├── plan_template.md     # Plan template
+        ├── tasks_template.md    # Task breakdown template
+        └── templates/           # LaTeX templates (IEEE / CIEP)
+            ├── ieee/            # IEEE-style template
+            └── ciep/            # CIEP-style template
 ```
 
 ---
@@ -118,21 +123,20 @@ The harness supports multiple security profiles configured via `harness-config.y
 
 ---
 
-## Tipos de Proyecto Especializados
+## Command Reference
 
-El harness soporta tipos de proyecto con plantillas y flujos adaptados que se
-integran en el ciclo SDD estándar sin introducir comandos nuevos.
+| Command | Description | Workflow |
+|---------|-------------|----------|
+| `/specify` | Phase 1: Discovery and Specification | `workflows/commands/specify.md` |
+| `/plan` | Phase 2: Design and Planning | `workflows/commands/plan.md` |
+| `/implement` | Phase 3: Implementation (TDD) | `workflows/commands/implement.md` |
+| `/review` | Quality gates and code review | `workflows/commands/review.md` |
+| `/exposition` | Generate academic presentation (summary, slides, script) | `workflows/commands/exposition.md` |
+| `/report` | Generate academic/technical report with Mermaid diagrams | `workflows/commands/report.md` |
 
-| Tipo | Descripción | Entregables | Documentación |
-|------|-------------|-------------|---------------|
-| `exposition` | Presentaciones académicas | Resumen, presentación LaTeX, guion | `project_types/exposition/README.md` |
-| `reporte` | Reportes académicos/técnicos | Especificación, plan, tareas, documento LaTeX (IEEE/CIEP), PDF | `project_types/reporte/README.md` |
-
-Para activar un tipo especializado, establece `project.type` en `harness-config.yaml`
-al valor correspondiente. Las plantillas genéricas son sobreescritas automáticamente
-por las del tipo de proyecto. Los assets adicionales (p.ej. archivos LaTeX) solo
-se copian cuando la tarea correspondiente lo indica, no al inicio del proyecto.
-
+The first four commands form the **SDD lifecycle** and must be executed in order.
+The last two are **standalone utilities** that can be invoked from any project
+to generate documentation deliverables.
 
 ---
 

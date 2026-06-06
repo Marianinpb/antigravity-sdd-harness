@@ -66,9 +66,15 @@ _Se usan palabras clave RFC-2119: **DEBE**, **NO DEBE**, **DEBERÍA**, **PUEDE**
 - **FR-03:** El sistema **DEBE** consolidar la información de todas las fuentes provistas en el `harness-config.yaml` bajo la sección `reporte.sources`.
 
 ### 4.3. Generación del reporte
-- **FR-04:** El sistema **DEBE** copiar la plantilla y assets de `project_types/reporte/templates/[template_name]/` al directorio `reporte/` del proyecto.
+- **FR-04:** El sistema **DEBE** copiar la plantilla y assets de `command_assets/reporte/templates/[template_name]/` al directorio `reporte/` del proyecto.
 - **FR-05:** El sistema **DEBE** reemplazar los placeholders del documento LaTeX con los metadatos y el contenido extraído.
 - **FR-06:** El sistema **DEBE** intentar compilar el reporte si dispone de `pdflatex` o similar.
+
+### 4.4. Diagramas
+- **FR-07:** Si el reporte requiere diagramas, el sistema **DEBE** generarlos con Mermaid.
+- **FR-08:** Los diagramas **DEBEN** renderizarse a SVG con fondo transparente usando `mmdc -b transparent`.
+- **FR-09:** El sistema **NO DEBE** usar `\begin{tikzpicture}`, `pgfplots` u otros entornos de dibujo LaTeX nativos.
+- **FR-10:** El sistema **DEBE** incluir `\usepackage{svg}` en el preámbulo LaTeX cuando se usen diagramas.
 
 ---
 

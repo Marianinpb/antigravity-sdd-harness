@@ -44,23 +44,9 @@ The agent designs the technical solution:
    to each component?
 5. **File structure:** What files will be created, modified, or deleted?
 
-> **Project Type Override:** If `project.type` in `harness-config.yaml` matches
-> a type defined in `registry.yaml` → `project_types`, the agent MUST use the
-> `templates_override.plan` and `templates_override.tasks` templates instead of
-> the generic ones in `templates/`.
->
-> **Para el tipo `exposition`:** El plan y el desglose de tareas son en gran
-> medida predefinidos en las plantillas especializadas. El agente los adapta al
-> tipo de fuente específico (paper, tema+libro, repo) pero sigue la estructura
-> de fases predefinida:
-> - Fase A: Recolección de datos del expositor (SIEMPRE primera)
-> - Fase B: Análisis de la fuente y generación de resumen
-> - Fase C: Generación de la presentación LaTeX (con copia condicional de assets)
-> - Fase D: Generación del guion de exposición
->
-> Usar las plantillas:
-> - Plan: `project_types/exposition/plan_template.md`
-> - Tareas: `project_types/exposition/tasks_template.md`
+> **Note:** The `/exposition` and `/report` commands have their own self-contained
+> workflows in `workflows/commands/exposition.md` and `workflows/commands/report.md`.
+> Those commands bypass the standard SDD lifecycle and do not use `/plan`.
 
 ### Step 3: Identify Dependencies
 

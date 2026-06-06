@@ -96,7 +96,7 @@
 ## Fase C: Generación de la presentación LaTeX
 
 - `[ ]` **TASK-04:** Copiar plantilla LaTeX al directorio del proyecto
-  - **_Boundary_:** Solo copia archivos de `project_types/exposition/templates/`
+  - **_Boundary_:** Solo copia archivos de `command_assets/exposition/templates/`
     al directorio `presentacion/` del proyecto. No modifica ningún archivo.
   - **_Depends_:** TASK-01
   - **Descripción:** Crear el directorio `presentacion/` si no existe, y copiar
@@ -115,6 +115,7 @@
 
 - `[ ]` **TASK-05:** Reemplazar placeholders y generar contenido de diapositivas
   - **_Boundary_:** Solo modifica `presentacion/presentacion.tex`.
+    Crea `presentacion/diagramas/` si se requieren diagramas.
   - **_Depends_:** TASK-03, TASK-04
   - **Descripción:**
     1. Reemplazar placeholders de metadatos con datos del usuario (TASK-01):
@@ -127,15 +128,23 @@
        a partir del resumen (TASK-03). Cada concepto principal → una `\section{}`.
        Cada punto clave dentro de un concepto → un `\begin{frame}{}...\end{frame}`.
        Incluir ecuaciones con entornos `equation` si aplica.
-    3. Verificar que NO existe ninguna cadena `{{` en el archivo resultante.
+    3. **Diagramas con Mermaid (si aplica):**
+       - Agregar `\usepackage{svg}` al preámbulo
+       - Definir diagramas en `presentacion/diagramas/*.mmd`
+       - Renderizar: `mmdc -i <archivo>.mmd -o <archivo>.svg -b transparent`
+       - Incluir: `\includesvg[width=0.8\linewidth]{presentacion/diagramas/<archivo>}`
+       - Seguir `rules/diagram-standards.md`
+    4. Verificar que NO existe ninguna cadena `{{` en el archivo resultante.
   - **Criterios de aceptación:**
     - [ ] El archivo no contiene la cadena `{{`.
     - [ ] Los metadatos son los provistos por el usuario (no inferidos de la fuente).
     - [ ] Hay al menos una sección con al menos un frame por cada concepto principal.
     - [ ] El contenido está en el idioma configurado.
-  - **Tests/Verificación:** Búsqueda de `{{` en el archivo; revisión de metadatos.
+    - [ ] Los diagramas SVG tienen fondo transparente.
+    - [ ] No hay `\begin{tikzpicture}` en el `.tex`.
+  - **Tests/Verificación:** Búsqueda de `{{` en el archivo; revisión de metadatos; `mmdc` sin errores.
   - **Complejidad:** Alta
-  - **Notas:** [Completar durante `/implement`]
+  - **Notas:** [Completar durante el comando `/exposition`]
 
 - `[ ]` **TASK-06:** Compilar la presentación a PDF (condicional)
   - **_Boundary_:** Solo genera `presentacion/presentacion.pdf`. No modifica `.tex`.

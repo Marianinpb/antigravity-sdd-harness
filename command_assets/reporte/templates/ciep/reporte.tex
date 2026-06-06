@@ -12,6 +12,7 @@
 \newtheorem{problem}{Problema}[section]
 \newtheorem{example}{Ejemplo}[section]
 \usepackage{graphicx}
+\usepackage{svg}                     % Para incluir diagramas Mermaid renderizados a SVG
 \usepackage[numbers]{natbib}
 \usepackage{tikz}
 \usepackage{mathdots}
@@ -59,6 +60,13 @@
 \end{keywords}
 
 \maketitle
+
+% INSTRUCCIÓN PARA DIAGRAMAS:
+% Todos los diagramas DEBEN generarse con Mermaid.
+%   mmdc -i reporte/diagramas/<archivo>.mmd -o reporte/diagramas/<archivo>.svg -b transparent
+% Incluir en LaTeX:
+%   \includesvg[width=0.9\linewidth]{reporte/diagramas/<archivo>}
+% NO usar tikzpicture para generar diagramas (solo se permite si es parte esencial de la plantilla).
 
 {{CONTENIDO_SECCIONES}}
 

@@ -73,20 +73,9 @@ Using `templates/spec-template.md`, the agent creates:
 - **SPEC-ID format:** `SPEC-XX` where XX is a zero-padded sequential number
 - **Content:** All sections of the template filled with the analyzed requirements
 
-> **Project Type Override:** If `project.type` in `harness-config.yaml` matches
-> a type defined in `registry.yaml` → `project_types`, the agent MUST use the
-> `templates_override.spec` template instead of `templates/spec-template.md`.
->
-> **Para el tipo `exposition` específicamente:**
-> 1. El agente DEBE solicitar EXPLÍCITAMENTE al usuario todos los datos del
->    expositor (título, autor, institución, fecha, audiencia, duración) ANTES
->    de generar la especificación. Estos valores NUNCA deben inferirse de la fuente.
-> 2. El agente lee la configuración de la fuente desde `harness-config.yaml` →
->    `exposition` para determinar el tipo de contenido (paper, tema+libro, repo).
-> 3. El idioma de los entregables es español por defecto (`language: es`). El
->    agente NO DEBE cambiarlo sin confirmación humana explícita, aunque la fuente
->    esté en otro idioma.
-> 4. Usar la plantilla: `project_types/exposition/spec_template.md`
+> **Note:** The `/exposition` and `/report` commands have their own self-contained
+> workflows in `workflows/commands/exposition.md` and `workflows/commands/report.md`.
+> Those commands bypass the standard SDD lifecycle and do not use `/specify`.
 
 Key rules for the specification:
 - Use RFC-2119 keywords (MUST, MUST NOT, SHOULD, SHOULD NOT, MAY)

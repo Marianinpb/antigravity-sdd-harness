@@ -35,6 +35,7 @@
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{graphicx}
+\usepackage{svg}                     % Para incluir diagramas Mermaid renderizados a SVG
 
 \newcommand{\themename}{\textbf{\textsc{metropolis}}\xspace}
 
@@ -79,6 +80,9 @@
 %
 % Para ecuaciones matemáticas, usar entornos equation o equation*.
 % Para bloques destacados, usar \begin{alertblock}{Título}...\end{alertblock}.
+% Para diagramas, usar Mermaid → SVG con fondo transparente e incluir con:
+%   \includesvg[width=0.8\linewidth]{presentacion/diagramas/nombre}
+% NO usar tikzpicture, pgfplots, ni otros entornos de dibujo nativos de LaTeX.
 % -----------------------------------------------------------------------------
 
 {{CONTENIDO_SECCIONES}}

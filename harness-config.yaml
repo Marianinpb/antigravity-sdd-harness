@@ -23,8 +23,6 @@ project:
                               #   "cli-tool"      - Command-line tools
                               #   "library"       - Reusable libraries/packages
                               #   "desktop-app"   - Desktop applications
-                              #   "exposition"    - Presentaciones académicas (LaTeX beamer)
-                              #   "reporte"       - Reportes técnicos o académicos (LaTeX IEEE)
   description: ""             # Brief, high-level project description.
 
 # ---------------------------------------------------------------------------
@@ -94,13 +92,14 @@ custom_quality_gates: []
   #   mandatory: true
 
 # ---------------------------------------------------------------------------
-# Configuración de Exposición (solo aplica si project.type = "exposition")
+# Configuración de Exposición (configuración previa para el comando /exposition)
 # ---------------------------------------------------------------------------
-# El agente lee esta sección cuando detecta project.type: exposition.
+# Esta sección es OPCIONAL. Si está vacía, el comando /exposition pregunta
+# los datos interactivamente al usuario.
 #
 # REGLA CRÍTICA: Los campos title, subtitle, author, institution y date
 # NO deben inferirse de la fuente de contenido. El agente DEBE preguntar
-# estos datos EXPLÍCITAMENTE al usuario durante /specify.
+# estos datos EXPLÍCITAMENTE al usuario durante /exposition.
 #
 # El autor del paper ≠ el expositor.
 # El título del paper ≠ el título de la exposición.
@@ -130,13 +129,14 @@ exposition:
                               # El idioma de la fuente NO determina el idioma de la presentación.
 
 # ---------------------------------------------------------------------------
-# Configuración de Reporte (solo aplica si project.type = "reporte")
+# Configuración de Reporte (configuración previa para el comando /report)
 # ---------------------------------------------------------------------------
-# El agente lee esta sección cuando detecta project.type: reporte.
+# Esta sección es OPCIONAL. Si está vacía, el comando /report pregunta
+# los datos interactivamente al usuario.
 #
 # REGLA CRÍTICA: Los campos title, author, institution, y correspondence
 # NO deben inferirse de la fuente de contenido. El agente DEBE preguntar
-# estos datos EXPLÍCITAMENTE al usuario durante /specify.
+# estos datos EXPLÍCITAMENTE al usuario durante /report.
 # ---------------------------------------------------------------------------
 reporte:
   # Fuentes de contenido (se pueden combinar):

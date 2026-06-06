@@ -99,7 +99,7 @@ _Se usan palabras clave RFC-2119: **DEBE**, **NO DEBE**, **DEBERÍA**, **PUEDE**
   fuente con el nombre `resumen_paper.md`, `resumen_tema.md`, o
   `resumen_proyecto.md` según el tipo de fuente.
 - **FR-08:** El sistema **DEBE** copiar la plantilla LaTeX desde
-  `project_types/exposition/templates/` al directorio `presentacion/` del proyecto.
+  `command_assets/exposition/templates/` al directorio `presentacion/` del proyecto.
 - **FR-09:** El sistema **DEBE** reemplazar los placeholders `{{TITULO}}`,
   `{{SUBTITULO}}`, `{{AUTOR}}`, `{{INSTITUCION}}`, `{{FECHA}}` y
   `{{CONTENIDO_SECCIONES}}` en `presentacion.tex` con los valores correctos.
@@ -114,6 +114,16 @@ _Se usan palabras clave RFC-2119: **DEBE**, **NO DEBE**, **DEBERÍA**, **PUEDE**
   al usuario si desea instalarlo. Si el usuario dice que no, solo generar el `.tex`.
 - **FR-13:** Si la compilación falla, el sistema **DEBE** reportar el error y
   no marcar la tarea como completada.
+
+### 5.5. Diagramas (opcional)
+- **FR-14:** Si la presentación requiere diagramas, el sistema **DEBE** generarlos
+  con Mermaid en archivos `.mmd` dentro de `presentacion/diagramas/`.
+- **FR-15:** Los diagramas **DEBEN** renderizarse a SVG con fondo transparente:
+  `mmdc -i <archivo>.mmd -o <archivo>.svg -b transparent`.
+- **FR-16:** Los SVG **DEBEN** incluirse en LaTeX vía `\includesvg{}` con
+  `\usepackage{svg}` en el preámbulo.
+- **FR-17:** El sistema **NO DEBE** usar `\begin{tikzpicture}`, `pgfplots` u otros
+  entornos de dibujo LaTeX nativos para generar diagramas.
 
 ---
 
@@ -147,15 +157,19 @@ _Se usan palabras clave RFC-2119: **DEBE**, **NO DEBE**, **DEBERÍA**, **PUEDE**
   de los entregables.
 - **NFR-03:** [Integridad] Ningún placeholder `{{...}}` **DEBE** quedar sin
   reemplazar en el archivo `.tex` final.
+- **NFR-04:** [Diagramas] Si se requieren diagramas, estos **DEBEN** generarse con
+  Mermaid y renderizarse a SVG con fondo transparente. **NO DEBEN** usarse
+  entornos de dibujo LaTeX nativos (`tikzpicture`, `pgfplots`).
+- **NFR-05:** [SVG] Los diagramas SVG generados **DEBEN** tener fondo transparente
+  (usar `mmdc -b transparent`).
 
 ---
 
 ## 8. Criterios de Aceptación
 
-- **AC-01:** Dado que el usuario ejecuta `/specify` en un proyecto con
-  `project.type: exposition`, cuando el agente activa el módulo, entonces
-  el agente solicita explícitamente todos los campos del expositor antes de
-  generar la especificación.
+- **AC-01:** Dado que el usuario ejecuta `/exposition`, cuando el agente inicia
+  el comando, entonces el agente solicita explícitamente todos los campos del
+  expositor antes de generar la especificación.
 - **AC-02:** Dado un `paper_path` configurado, cuando el agente analiza la fuente,
   entonces genera un `resumen_paper.md` coherente con el contenido del paper.
 - **AC-03:** Dado que el agente genera `presentacion.tex`, cuando se compila con
@@ -167,18 +181,23 @@ _Se usan palabras clave RFC-2119: **DEBE**, **NO DEBE**, **DEBERÍA**, **PUEDE**
 - **AC-06:** Dado que el agente genera `guion_exposicion.md`, cuando se compara
   con `presentacion.tex`, entonces cada frame de la presentación tiene su
   sección correspondiente en el guion.
+- **AC-07:** Dado que se requieren diagramas, cuando el agente los genera con
+  Mermaid, entonces los archivos `.mmd` renderizan a SVG sin errores y los
+  SVG tienen fondo transparente.
+- **AC-08:** Dado que el agente genera `presentacion.tex`, cuando se inspecciona
+  el archivo, entonces no existe ningún `\begin{tikzpicture}`.
 
 ---
 
 ## 9. Restricciones y Suposiciones
 
 ### Restricciones
-- Los assets LaTeX (`.sty`, logos) SOLO se copian para proyectos de tipo `exposition`.
+- Los assets LaTeX (`.sty`, logos) SOLO se copian al ejecutar el comando `/exposition`.
 - El título, autor e institución NUNCA se infieren del contenido de la fuente.
 - El cambio de idioma requiere confirmación humana explícita.
 
 ### Suposiciones
-- El usuario ha configurado `project.type: exposition` en `harness-config.yaml`.
+- El usuario ha invocado el comando `/exposition`.
 - Exactamente una fuente de contenido está activa (`paper_path` O `topic`+`book_reference` O `repo_url`).
 - Los logos `IICO-LOGO-AZUL.png` y `UASLP-LOGO-AZUL.png` son los logos institucionales correctos.
 
@@ -202,6 +221,6 @@ _Se usan palabras clave RFC-2119: **DEBE**, **NO DEBE**, **DEBERÍA**, **PUEDE**
 
 ## 11. Referencias
 
-- Plantilla LaTeX: `project_types/exposition/templates/presentacion.tex`
+- Plantilla LaTeX: `command_assets/exposition/templates/presentacion.tex`
 - Ejemplo de exposición: `ejemplo_expo/` (referencia del harness)
 - Estándar de especificación: `templates/spec-template.md`

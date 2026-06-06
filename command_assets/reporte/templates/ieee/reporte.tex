@@ -3,6 +3,7 @@
 \usepackage{amsmath,amssymb,amsfonts}
 \usepackage{algorithmic}
 \usepackage{graphicx,color}
+\usepackage{svg}                     % Para incluir diagramas Mermaid renderizados a SVG
 \usepackage{textcomp}
 \usepackage[spanish]{babel}
 \usepackage[utf8]{inputenc}
@@ -34,6 +35,13 @@
 \begin{IEEEkeywords}
 {{PALABRAS_CLAVE}}
 \end{IEEEkeywords}
+
+% INSTRUCCIÓN PARA DIAGRAMAS:
+% Todos los diagramas DEBEN generarse con Mermaid.
+%   mmdc -i reporte/diagramas/<archivo>.mmd -o reporte/diagramas/<archivo>.svg -b transparent
+% Incluir en LaTeX:
+%   \includesvg[width=0.9\linewidth]{reporte/diagramas/<archivo>}
+% NO usar tikzpicture, pgfplots, ni otros entornos de dibujo nativos.
 
 \maketitle
 

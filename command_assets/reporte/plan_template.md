@@ -2,6 +2,7 @@
 
 > **Estado:** Borrador | En Revisión | Aprobado
 > **Especificación:** [Enlace a la spec aprobada: specs/SPEC-XX-reporte.md]
+> **Comando:** `/report`
 > **Autor:** [Nombre del autor — dato proporcionado explícitamente por el usuario]
 > **Fecha:** [YYYY-MM-DD]
 > **Aprobado por:** [Nombre] el [YYYY-MM-DD]
@@ -10,7 +11,7 @@
 
 ## 1. Resumen
 
-Este plan describe cómo se generarán los entregables del reporte académico o técnico a partir de las fuentes de contenido especificadas. El proceso sigue el flujo SDD estándar, usando plantillas y tareas predefinidas para el tipo `reporte`.
+Este plan describe cómo se generarán los entregables del reporte académico o técnico a partir de las fuentes de contenido especificadas. El proceso usa el comando `/report` con plantillas y tareas predefinidas.
 
 **Enfoque técnico:**
 El agente analiza las fuentes de contenido con sus capacidades LLM, consolida la información y la estructura en un documento LaTeX (formato IEEE).
@@ -52,8 +53,9 @@ proyecto/
 
 | Componente | Tecnología | Justificación |
 |------------|-----------|---------------|
-| Documento | LaTeX (IEEEoj) | Plantilla formal estructurada |
+| Documento | LaTeX (IEEEoj / CIEP) | Plantilla formal estructurada |
 | Compilación | pdflatex | Estándar para compilar LaTeX |
+| Diagramas | Mermaid → SVG | Diagramas vectoriales con fondo transparente |
 | Análisis de fuente | Capacidades LLM del agente | Consolidar conocimiento de múltiples fuentes |
 
 ---
@@ -95,22 +97,42 @@ _Cada tarea incluye `_Boundary_` y `_Depends_`. Ver `tasks/TASKS-XX-reporte.md`.
 
 #### Tarea 4: Copiar plantilla LaTeX al directorio del proyecto
 - **ID:** TASK-04
-- **_Boundary_:** Solo copia archivos de `project_types/reporte/templates/[template_name]/` a `reporte/`.
+- **_Boundary_:** Solo copia archivos de `command_assets/reporte/templates/[template_name]/` a `reporte/`.
 - **_Depends_:** TASK-01
 - **Descripción:** Copiar condicionalmente `reporte.tex` y los logos/archivos de la plantilla configurada (`ieee` o `ciep`).
 - **Complejidad:** Baja
 
 #### Tarea 5: Reemplazar placeholders y redactar contenido
 - **ID:** TASK-05
-- **_Boundary_:** Solo modifica `reporte/reporte.tex`.
+- **_Boundary_:** Modifica `reporte/reporte.tex`. Si se requieren diagramas, crear `reporte/diagramas/`.
 - **_Depends_:** TASK-03, TASK-04
-- **Descripción:** Inyecta los metadatos del usuario y desarrolla el contenido técnico del reporte estructurando el texto consolidado en las secciones de LaTeX.
+- **Descripción:** Inyecta los metadatos del usuario y desarrolla el contenido técnico del reporte estructurando el texto consolidado en las secciones de LaTeX. Si el reporte requiere diagramas:
+  1. Agregar `\usepackage{svg}` al preámbulo de `reporte.tex`.
+  2. Definir los diagramas en `reporte/diagramas/*.mmd` usando sintaxis Mermaid.
+  3. Referenciar en LaTeX usando `\includesvg[width=0.9\linewidth]{reporte/diagramas/<nombre>}`.
+  4. NO usar `\begin{tikzpicture}` ni otros entornos de dibujo LaTeX.
+  Seguir `rules/diagram-standards.md` estrictamente.
 - **Complejidad:** Alta
 
-#### Tarea 6: Compilar el documento a PDF
+#### Tarea 6: Generar diagramas Mermaid y renderizar a SVG (si aplica)
 - **ID:** TASK-06
-- **_Boundary_:** Solo genera `reporte/reporte.pdf`.
+- **_Boundary_:** Crea y modifica archivos en `reporte/diagramas/`.
 - **_Depends_:** TASK-05
+- **Descripción:** Para cada diagrama definido en TASK-05:
+  1. Verificar que `mmdc` está instalado (`mmdc --version`). Si no, ofrecer instalación: `npm install -g @mermaid-js/mermaid-cli`.
+  2. Renderizar cada `.mmd` a SVG:
+     ```bash
+     mmdc -i reporte/diagramas/<archivo>.mmd -o reporte/diagramas/<archivo>.svg -b transparent
+     ```
+  3. Verificar que el SVG se generó correctamente y tiene fondo transparente.
+  4. Si un diagrama falla al renderizar, corregir la sintaxis y reintentar.
+- **Complejidad:** Media
+- **Nota:** Si el usuario indicó que NO se requieren diagramas, esta tarea se omite.
+
+#### Tarea 7: Compilar el documento a PDF
+- **ID:** TASK-07
+- **_Boundary_:** Solo genera `reporte/reporte.pdf`.
+- **_Depends_:** TASK-05, TASK-06 (si aplica)
 - **Descripción:** Verifica `pdflatex` e intenta compilar, informando al usuario en caso de falta de compilador.
 - **Complejidad:** Media
 
@@ -120,12 +142,22 @@ _Cada tarea incluye `_Boundary_` y `_Depends_`. Ver `tasks/TASKS-XX-reporte.md`.
 
 | Dependencia | Propósito | ¿Nueva? |
 |-------------|-----------|---------|
-| pdflatex | Compilación LaTeX | Solo si no instalado |
+| pdflatex / latexmk | Compilación LaTeX | Solo si no instalado |
+| mmdc (Mermaid CLI) | Renderizado de diagramas a SVG | Solo si se requieren diagramas |
 
 ---
 
 ## 6. Verificación
 
+### Verificación automática
 - `[ ]` Todos los archivos de la plantilla LaTeX existen en `reporte/`.
 - `[ ]` `reporte.tex` no contiene la cadena `{{`.
+- `[ ]` `reporte.tex` no contiene `\begin{tikzpicture}`.
+- `[ ]` Si se requieren diagramas: `reporte/diagramas/` existe con `.mmd` + `.svg`.
+- `[ ]` Si se requieren diagramas: todos los `.mmd` renderizan sin errores.
 - `[ ]` Si se compiló: `reporte.pdf` existe y es válido.
+
+### Verificación manual
+- `[ ]` Revisar que los metadatos del reporte son correctos (autor, título, etc.).
+- `[ ]` Revisar que el contenido es coherente con las fuentes proporcionadas.
+- `[ ]` Revisar que los diagramas SVG se ven correctamente y tienen fondo transparente.
