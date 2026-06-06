@@ -1,0 +1,14 @@
+{
+  "theme": "base",
+  "themeVariables": {
+    "primaryColor": "#E6E6FA",
+    "primaryBorderColor": "#800080",
+    "lineColor": "#800080",
+    "textColor": "#000000",
+    "clusterBkg": "#F8F8FF",
+    "clusterBorder": "#800080"
+  },
+  "htmlLabels": false,
+  "flowchart": { "htmlLabels": false },
+  "state": { "htmlLabels": false }
+}

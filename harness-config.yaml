@@ -12,37 +12,17 @@
 # Project Definition [REQUIRED]
 # ---------------------------------------------------------------------------
 project:
-  name: ""                    # Project name. Example: "SensorFirmware"
-  type: ""                    # Project type. Options:
-                              #   "embedded"      - Firmware, microcontrollers
-                              #   "fpga"          - VHDL/Verilog FPGA designs
-                              #   "web-api"       - Backend APIs, web services
-                              #   "web-app"       - Frontend web applications
-                              #   "mobile-app"    - Mobile applications
-                              #   "data-science"  - Data analysis, ML/AI
-                              #   "cli-tool"      - Command-line tools
-                              #   "library"       - Reusable libraries/packages
-                              #   "desktop-app"   - Desktop applications
-  description: ""             # Brief, high-level project description.
+  name: "FPGA-Graphic-Equalizer"
+  type: "fpga"
+  description: "Ecualizador gráfico digital de 8 bandas en FPGA Altera DE2-115 con interfaz VGA y códec WM8731."
 
 # ---------------------------------------------------------------------------
 # Environment & Technology [REQUIRED]
 # ---------------------------------------------------------------------------
 environment:
-  tech_stack: []              # Languages and frameworks used.
-                              # Examples:
-                              #   ["python", "fastapi", "postgresql"]
-                              #   ["c", "esp-idf", "freertos"]
-                              #   ["vhdl", "quartus"]
-                              #   ["python", "pytorch", "pandas"]
-                              #   ["latex"]
-  runtime_version: ""         # Primary runtime version. Example: "3.11", "esp-idf-v5.1"
-  package_manager: ""         # Package manager. Options:
-                              #   "pip", "poetry", "conda"      (Python)
-                              #   "idf.py"                       (ESP-IDF)
-                              #   "quartus", "vivado"            (FPGA)
-                              #   "npm", "yarn", "pnpm"          (JavaScript)
-                              #   ""                             (None/manual)
+  tech_stack: ["vhdl", "quartus", "python"]
+  runtime_version: "DE2-115"
+  package_manager: "quartus"
 
 # ---------------------------------------------------------------------------
 # Harness Behavior

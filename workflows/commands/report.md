@@ -106,16 +106,17 @@ Execute each task in order following:
 
 #### TASK-05: Content Generation (Diagram Rules)
 When redacting content that references diagrams:
-1. Add `\usepackage{svg}` to the LaTeX preamble.
+1. Add `\usepackage[inkscapelatex=false]{svg}` to the LaTeX preamble.
 2. Reference figures as: `\includesvg[width=0.9\linewidth]{reporte/diagramas/<nombre>}`
 3. Each figure MUST have a `\caption{}` and `\label{}`.
 
 #### TASK-06: Mermaid Diagram Generation
 For each diagram needed:
 1. Define in `reporte/diagramas/<nombre>.mmd` using Mermaid syntax.
-2. Render to SVG: `mmdc -i reporte/diagramas/<nombre>.mmd -o reporte/diagramas/<nombre>.svg -b transparent`
-3. Verify the output SVG exists and has no rendering errors.
-4. Follow `rules/diagram-standards.md` strictly.
+2. Copy `harness/command_assets/reporte/diagramas_assets/*` to `reporte/diagramas/`.
+3. Render to SVG: Run `compilar_diagrama.bat <nombre>.mmd` or use `mmdc` directly with `-p puppeteer-config.json -c mermaid-config.json` and `-b transparent`.
+4. Verify the output SVG exists and has no rendering errors.
+5. Follow `rules/diagram-standards.md` strictly.
 
 ### Step 7: Quality Gates
 
